@@ -1,0 +1,24 @@
+!pip install fastapi uvicorn nest_asyncio pyngrok
+
+from fastapi import FastAPI
+import uvicorn
+import nest_asyncio
+from pyngrok import ngrok
+import json
+
+nest_asyncio.apply()
+
+app = FastAPI()
+
+data = None
+with open('caminho_para_seu_arquivo.json', 'r') as file:
+    data = json.load(file)
+
+@app.get("/index")
+def read_index():
+    return data
+
+public_url = ngrok.connect(8000)
+print(f"Public URL: {public_url}")
+
+uvicorn.run(app, host="0.0.0.0", port=8000)
